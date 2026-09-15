@@ -216,9 +216,9 @@ plugins:
       hideTagPages: true
       hideFolderPages: true
     layout:
-      position: left
-      priority: 100
-      display: desktop-only
+      position: afterBody
+      priority: 50
+      condition: is-index
   - source: github:quartz-community/spacer
     enabled: true
     options: {}
