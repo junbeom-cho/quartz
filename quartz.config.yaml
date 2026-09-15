@@ -4,10 +4,7 @@ configuration:
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
-  analytics:
-    provider: umami
-    host: https://umami.techbara.dev
-    websiteId: d22f4cb7-e0fa-45dc-a976-26c49ad6feec
+  analytics: false
   locale: ko-KR
   baseUrl: wiki.techbara.dev
   ignorePatterns:
@@ -104,6 +101,11 @@ plugins:
     order: 92
   - source: github:quartz-community/fonts
     enabled: true
+    options:
+      fontOrigin: local
+      body: Pretendard
+      header: WantedSans
+      code: JetBrains Mono, D2Coding
   - source: github:quartz-community/remove-draft
     enabled: false
   - source: github:quartz-community/explicit-publish
