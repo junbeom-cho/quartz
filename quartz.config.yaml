@@ -15,8 +15,8 @@ configuration:
     fontOrigin: local
     cdnCaching: false
     typography:
-      header: Schibsted Grotesk
-      body: Source Sans Pro
+      header: Noto Sans KR
+      body: Noto Sans KR
       code: IBM Plex Mono
     colors:
       lightMode:
@@ -117,12 +117,13 @@ plugins:
     options:
       enableSiteMap: true
       enableRSS: true
+      includeEmptyFiles: false
   - source: github:quartz-community/favicon
     enabled: true
   - source: github:quartz-community/og-image
     enabled: true
   - source: github:quartz-community/cname
-    enabled: true
+    enabled: false
   - source: github:quartz-community/canvas-page
     enabled: true
   - source: github:quartz-community/content-page
@@ -155,7 +156,6 @@ plugins:
     layout:
       position: right
       priority: 50
-      condition: has-backlinks
   - source: github:quartz-community/article-title
     enabled: true
     layout:
