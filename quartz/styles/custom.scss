@@ -135,3 +135,28 @@
         max-height: 24rem;
     }
 }
+
+// disableBrokenWikilinks가 가상 페이지인 태그 링크에도 broken을 붙이므로 태그 링크는 원래대로
+a.internal.tag-link.broken {
+    opacity: 1;
+}
+
+// 본문·제목의 한글을 음절이 아닌 어절(띄어쓰기) 단위로 줄바꿈.
+// body 전체에 걸면 띄어쓰기 없는 긴 제목이 모바일에서 가로 스크롤을 만들어 범위를 제한하고,
+// 띄어쓰기 없이 긴 단어는 overflow-wrap: anywhere로 강제 줄바꿈
+article,
+.article-title {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+
+// footer 플러그인은 링크 외 문구 옵션이 없어서 "Created with Quartz" 줄을 저작권 문구로 교체
+footer > p {
+    display: none;
+}
+footer::before {
+    content: "Copyright \00A9  2026 | All rights reserved.";
+    display: block;
+    margin: 1em 0; // 숨긴 <p>와 같은 여백
+    line-height: 1.6rem;
+}

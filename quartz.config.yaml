@@ -5,7 +5,7 @@ configuration:
   enableSPA: true
   enablePopovers: true
   analytics: false
-  locale: ko-KR
+  locale: en-US
   baseUrl: wiki.techbara.dev
   ignorePatterns:
     - private
@@ -78,6 +78,7 @@ plugins:
     enabled: true
     options:
       markdownLinkResolution: shortest
+      disableBrokenWikilinks: true
     order: 60
   - source: github:quartz-community/description
     enabled: true
@@ -91,7 +92,7 @@ plugins:
     enabled: false
     order: 85
   - source: github:quartz-community/hard-line-breaks
-    enabled: false
+    enabled: true
     order: 90
   - source: github:quartz-community/ox-hugo
     enabled: false
