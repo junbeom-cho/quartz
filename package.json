@@ -25,6 +25,10 @@
     "npm": ">=10.9.2",
     "node": ">=22"
   },
+  "allowScripts": {
+    "@parcel/watcher": true,
+    "esbuild@0.28.2": true
+  },
   "keywords": [
     "site generator",
     "ssg",
@@ -130,11 +134,5 @@
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
-  },
-  "allowScripts": {
-    "esbuild@0.27.7": true,
-    "esbuild@0.28.1": true,
-    "sharp@0.34.5": true,
-    "@parcel/watcher": true
   }
 }

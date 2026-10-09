@@ -103,9 +103,9 @@ plugins:
     enabled: true
     options:
       fontOrigin: local
-      body: Pretendard
-      header: WantedSans
-      code: JetBrains Mono, D2Coding
+      body: '"Pretendard", "SymbolsNerdFontMono", sans-serif'
+      header: '"Pretendard", "SymbolsNerdFontMono", sans-serif'
+      code: '"JetBrainsMonoNerd", "Pretendard", monospace'
   - source: github:quartz-community/remove-draft
     enabled: false
   - source: github:quartz-community/explicit-publish
