@@ -106,7 +106,7 @@ plugins:
       fontOrigin: local
       body: '"Pretendard", "SymbolsNerdFontMono", sans-serif'
       header: '"Pretendard", "SymbolsNerdFontMono", sans-serif'
-      code: '"JetBrainsMonoNerd", "Pretendard", monospace'
+      code: '"JetBrains Mono", "Pretendard", monospace'
   - source: github:quartz-community/remove-draft
     enabled: false
   - source: github:quartz-community/explicit-publish
@@ -126,6 +126,8 @@ plugins:
   - source: github:quartz-community/cname
     enabled: false
   - source: github:quartz-community/canvas-page
+    enabled: true
+  - source: github:quartz-community/obsidian-plugin-excalidraw
     enabled: true
   - source: github:quartz-community/content-page
     enabled: true

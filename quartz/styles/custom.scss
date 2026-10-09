@@ -63,59 +63,42 @@
     font-style: normal;
 }
  
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-Thin.woff2') format('woff2');
-    font-weight: 100;
-    font-style: normal;
-}
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-ExtraLight.woff2') format('woff2');
-    font-weight: 200;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-Light.woff2') format('woff2');
-    font-weight: 300;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-Medium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-SemiBold.woff2') format('woff2');
-    font-weight: 600;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
- 
-@font-face {
-    font-family: JetBrainsMonoNerd;
-    src: url('/static/fonts/JetBrainsMonoNerdFontMono-ExtraBold.woff2') format('woff2');
-    font-weight: 800;
-    font-style: normal;
+// 코드 폰트: 순정 JetBrains Mono (굵기·이탤릭 전부 선언해도 브라우저는 실제로 쓰는 것만 받음)
+// 같은 패밀리에 Nerd Font 아이콘 영역(PUA)만 Symbols 파일로 채워서 코드 속 아이콘도 표시.
+// 아이콘이 없는 페이지에서는 unicode-range 덕분에 Symbols 파일(1.1MB)을 받지 않음
+$jetbrains-weights: (
+    100: Thin,
+    200: ExtraLight,
+    300: Light,
+    400: Regular,
+    500: Medium,
+    600: SemiBold,
+    700: Bold,
+    800: ExtraBold,
+);
+@each $weight, $name in $jetbrains-weights {
+    @each $style, $suffix in (normal: "", italic: "Italic") {
+        $file: "#{$name}#{$suffix}";
+        // Regular의 이탤릭 파일 이름은 JetBrainsMono-Italic
+        @if $file == "RegularItalic" {
+            $file: "Italic";
+        }
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: url("/static/fonts/JetBrainsMono-#{$file}.woff2") format("woff2");
+            font-weight: $weight;
+            font-style: $style;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: url("/static/fonts/SymbolsNerdFontMono-Regular.woff2") format("woff2");
+            font-weight: $weight;
+            font-style: $style;
+            font-display: swap;
+            unicode-range: U+E000-F8FF, U+F0000-FFFFD;
+        }
+    }
 }
 
 @font-face {
