@@ -160,3 +160,28 @@ footer::before {
     margin: 1em 0; // 숨긴 <p>와 같은 여백
     line-height: 1.6rem;
 }
+
+// footer 링크를 아이콘으로 표시. 링크 텍스트는 font-size: 0으로 화면에서만 숨겨 스크린리더는 그대로 읽음
+footer ul a[href*="github.com"],
+footer ul a[href*="kuma.techbara.dev"],
+footer ul a[href*="blog.techbara.dev"] {
+    font-size: 0;
+
+    &::before {
+        content: "";
+        display: inline-block;
+        width: 1.25rem;
+        height: 1.25rem;
+        background-color: currentColor;
+        mask: no-repeat center / contain;
+    }
+}
+footer ul a[href*="github.com"]::before {
+    mask-image: url("/static/icons/github.svg");
+}
+footer ul a[href*="kuma.techbara.dev"]::before {
+    mask-image: url("/static/icons/uptime.svg");
+}
+footer ul a[href*="blog.techbara.dev"]::before {
+    mask-image: url("/static/icons/blog.svg");
+}
