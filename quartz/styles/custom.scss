@@ -154,6 +154,19 @@ article,
 footer > p {
     display: none;
 }
+// 저작권 문구와 링크 아이콘을 한 줄에 두고 아이콘은 오른쪽 끝으로 (좁은 화면에서는 아래 줄로)
+footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 1rem;
+}
+// footer 플러그인의 `footer ul { margin-top: -1rem }`(문구 바로 아래에 붙이는 용도) 해제.
+// margin-left: auto로 좁은 화면에서 아래 줄로 내려가도 오른쪽 끝 유지
+#quartz-body footer ul {
+    margin: 0 0 0 auto;
+}
 footer::before {
     content: "Copyright \00A9  2026 | All rights reserved.";
     display: block;
@@ -166,6 +179,9 @@ footer ul a[href*="github.com"],
 footer ul a[href*="kuma.techbara.dev"],
 footer ul a[href*="blog.techbara.dev"] {
     font-size: 0;
+    // 아이콘을 글자 기준선이 아닌 줄 가운데에 맞춤 (숨긴 텍스트도 line-height만큼 높이를 차지함)
+    display: flex;
+    align-items: center;
 
     &::before {
         content: "";
