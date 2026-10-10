@@ -208,7 +208,7 @@ plugins:
     options:
       links:
         GitHub: https://github.com/junbeom-cho/quartz
-        Uptime-Kuma: https://kuma.techbara.dev/status/quartz
+        Uptime-Kuma: https://kuma.techbara.dev/status/blog
         Blog: https://blog.techbara.dev
   - source: github:quartz-community/recent-notes
     enabled: true
