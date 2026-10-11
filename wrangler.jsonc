@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  // Worker 이름. cloudflare/deploy.sh(서버 build.sh 또는 PC)로만 수동 배포한다
+  "name": "techbara-wiki",
+  "compatibility_date": "2026-10-01",
+  // 정적 자산만 서빙하는 Worker (main 스크립트 없음). public/은 cloudflare/deploy.sh가 빌드해서 올린다
+  "assets": {
+    "directory": "./public",
+    // /note → note.html, /folder → /folder/ → folder/index.html (Quartz 링크 형식과 같음)
+    "html_handling": "auto-trailing-slash",
+    // 없는 경로는 Quartz의 404.html을 404 상태로 응답
+    "not_found_handling": "404-page",
+  },
+  // wiki.techbara.dev로 옮길 때 주석 해제 (배포 때 기존 wiki A 레코드를 Worker용 레코드로 바꾼다)
+  // "routes": [{ "pattern": "wiki.techbara.dev", "custom_domain": true }],
+  "workers_dev": true,
+  "preview_urls": false,
+}

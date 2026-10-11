@@ -29,12 +29,13 @@ npx quartz plugin install   # quartz.lock.json 기준 플러그인 설치 (.quar
 
 ### 빌드 스크립트
 
-| 파일              | 설명                                                                              |
-| ----------------- | --------------------------------------------------------------------------------- |
-| `build.sh`        | 서버 배포용. vault를 staging에 빌드하고, 성공했을 때만 rsync로 사이트 폴더를 교체 |
-| `ubuntu-build.sh` | 서버에서 vault를 `public/`에 빌드                                                 |
-| `win-build.bat`   | Windows 로컬 미리보기 (포트 8081)                                                 |
-| `default.conf`    | nginx로 서빙할 때 쓰는 설정                                                       |
+| 파일              | 설명                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `build.sh`        | 서버 배포용. 최신 설정을 받아 빌드하고, 검사를 통과하면 배포 |
+| `ubuntu-build.sh` | 서버에서 vault를 `public/`에 빌드                            |
+| `mac-build.sh`    | macOS 로컬 미리보기 (포트 8080)                              |
+| `win-build.bat`   | Windows 로컬 미리보기 (포트 8081)                            |
+| `default.conf`    | nginx로 서빙할 때 쓰는 설정                                  |
 
 ## 커스터마이징 규칙
 
