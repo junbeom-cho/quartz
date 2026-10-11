@@ -8,9 +8,9 @@ configuration:
   locale: en-US
   baseUrl: wiki.techbara.dev
   ignorePatterns:
-    - private
-    - templates
+    - 98-templates
     - .obsidian
+    - "01. Project"
   theme:
     fontOrigin: local
     cdnCaching: false
