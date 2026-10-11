@@ -13,6 +13,6 @@
   },
   // wiki.techbara.dev로 옮길 때 주석 해제 (배포 때 기존 wiki A 레코드를 Worker용 레코드로 바꾼다)
   "routes": [{ "pattern": "wiki.techbara.dev", "custom_domain": true }],
-  "workers_dev": true,
+  "workers_dev": false,
   "preview_urls": false,
 }
