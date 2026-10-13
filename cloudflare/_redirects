@@ -1,0 +1,6 @@
+# cloudflare/deploy.sh가 public/_redirects로 복사한다 (Quartz는 빌드할 때 public/을 비운다)
+
+# 네이버 서치어드바이저 소유확인 파일. Quartz는 vault의 naver….html을 확장자 없이 /naver…로 복사하고,
+# .html 파일로 두더라도 html_handling이 /naver…로 307 리다이렉트하므로, .html 주소에서 바로 200으로 응답하게 rewrite한다
+# 소유확인을 유지하려면 지우지 않는다. 파일명이 바뀌면 _headers의 경로도 같이 바꾼다 (guide/naver-site-verification.md)
+/naver19a49186f41af4882d62ee10333f5dbd.html /naver19a49186f41af4882d62ee10333f5dbd 200

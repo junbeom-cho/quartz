@@ -47,6 +47,7 @@ fi
 
 node cloudflare/check-publish.mjs "$VAULT_DIR" public
 cp cloudflare/_headers public/_headers
+cp cloudflare/_redirects public/_redirects
 
 # .env의 토큰은 wrangler가 직접 읽는다 (빌드 중 플러그인 코드의 환경 변수에는 들어가지 않음)
 npx wrangler@4 deploy "$@"
