@@ -95,7 +95,7 @@ vault 첨부 파일은 `/static/` 아래가 아니라 **경로를 slug로 바꾼
 | `stealth`  | 암호 페이지 전용. 잠금 해제 후에도 탐색기·그래프·검색에 나타나지 않음                             | `true`만. 암호 없는 페이지에서는 아무 효과 없음                                |
 
 > [!warning] `publish`는 `.md` 노트에만 적용됩니다
-> 이미지·PDF 같은 첨부 파일과 `.canvas`·`.base` 파일은 `publish`와 상관없이 vault에 있으면 배포 대상이 됩니다. 배포 스크립트(`cloudflare/check-publish.mjs`)가 `.canvas`·`.base`는 막고, 공개 노트가 참조하지 않는 첨부는 경고만 합니다. 비공개 노트의 첨부는 `quartz.config.yaml`의 `ignorePatterns`에 들어 있는 폴더(예: `01. Project`)에 두세요.
+> 이미지·PDF 같은 첨부 파일과 `.canvas`·`.base` 파일은 `publish`와 상관없이 vault에 있으면 배포 대상이 됩니다. 배포 스크립트(`deploy/check-publish.mjs`)가 `.canvas`·`.base`는 막고, 공개 노트가 참조하지 않는 첨부는 경고만 합니다. 비공개 노트의 첨부는 `quartz.config.yaml`의 `ignorePatterns`에 들어 있는 폴더(예: `01. Project`)에 두세요.
 
 ## 제목·설명·분류
 

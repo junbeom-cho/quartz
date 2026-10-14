@@ -29,13 +29,15 @@ npx quartz plugin install   # quartz.lock.json 기준 플러그인 설치 (.quar
 
 ### 빌드 스크립트
 
-| 파일              | 설명                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `build.sh`        | 서버 배포용. 최신 설정을 받아 빌드하고, 검사를 통과하면 배포 |
-| `ubuntu-build.sh` | 서버에서 vault를 `public/`에 빌드                            |
-| `mac-build.sh`    | macOS 로컬 미리보기 (포트 8080)                              |
-| `win-build.bat`   | Windows 로컬 미리보기 (포트 8081)                            |
-| `default.conf`    | nginx로 서빙할 때 쓰는 설정                                  |
+| 파일                       | 설명                                                                                                       |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `build.sh`                 | 서버 배포용. 최신 설정을 받아 빌드하고, 검사를 통과하면 Caddy가 서빙하는 폴더로 교체 (`--dry-run`: 검사만) |
+| `deploy/check-publish.mjs` | `build.sh`가 쓰는 검사. 비공개 노트나 `.canvas`·`.base`가 빌드 결과에 들어가면 배포를 막음                 |
+| `deploy/Caddyfile`         | 서버 Caddy의 wiki 사이트 블록 참고용 (URL 처리, 404, 네이버 소유확인 파일, 캐시)                           |
+| `ubuntu-build.sh`          | 서버에서 vault를 `public/`에 빌드                                                                          |
+| `mac-build.sh`             | macOS 로컬 미리보기 (포트 8080)                                                                            |
+| `win-build.bat`            | Windows 로컬 미리보기 (포트 8081)                                                                          |
+| `default.conf`             | nginx로 서빙할 때 쓰는 설정                                                                                |
 
 ## 커스터마이징 규칙
 

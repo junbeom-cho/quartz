@@ -2,7 +2,7 @@
 title: 네이버 서치어드바이저 소유확인
 description: 네이버 소유확인 HTML 파일이 배포되는 방식과, 확인 파일이나 사이트 주소가 바뀌었을 때 고칠 곳
 tags:
-  - cloudflare
+  - caddy
   - 가이드
 modified: 2026-10-14
 ---
@@ -10,56 +10,35 @@ modified: 2026-10-14
 네이버 서치어드바이저의 **HTML 파일 업로드** 방식 소유확인을 이 사이트에서 어떻게 처리하는지, 그리고 확인 파일이나 사이트 주소가 바뀌었을 때 무엇을 고치면 되는지 정리했습니다.
 
 > [!info] 기준
-> 2026-10-14 설정 기준. 지금 쓰는 확인 파일명은 `cloudflare/_redirects`의 규칙 줄에서 볼 수 있습니다.
+> 2026-10-14 설정 기준 (서버의 Caddy로 배포). 지금 쓰는 확인 파일은 vault 최상단의 `naver<코드>.html`입니다.
 
 ## 동작 방식
 
-네이버는 `https://wiki.techbara.dev/naver<코드>.html`을 요청해서 **리다이렉트 없이 200**으로 **받은 파일 내용이 그대로** 와야 소유확인을 해 줍니다. 이 사이트에서는 아래 세 곳이 함께 이 응답을 만듭니다.
+네이버는 `https://wiki.techbara.dev/naver<코드>.html`을 요청해서 **리다이렉트 없이 200**으로 **받은 파일 내용이 그대로** 와야 소유확인을 해 줍니다. 이 사이트에서는 아래 두 곳이 함께 이 응답을 만듭니다.
 
-| 위치                            | 역할                                                                                      |
-| ------------------------------- | ----------------------------------------------------------------------------------------- |
-| vault 최상단 `naver<코드>.html` | 네이버에서 받은 원본 파일. Quartz가 빌드할 때 `.html`을 떼고 `public/naver<코드>`로 복사  |
-| `cloudflare/_redirects`         | `/naver<코드>.html` 요청에 `/naver<코드>` 파일을 **같은 주소에서 200으로** 응답 (rewrite) |
-| `cloudflare/_headers`           | 그 주소의 Content-Type을 `text/plain`으로 지정                                            |
+| 위치                            | 역할                                                                                                       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| vault 최상단 `naver<코드>.html` | 네이버에서 받은 원본 파일. Quartz가 빌드할 때 `.html`을 떼고 사이트 루트에 `naver<코드>`로 복사            |
+| `deploy/Caddyfile`의 `@naver`   | `/naver<코드>.html` 요청을 `/naver<코드>` 파일로 **같은 주소에서 200으로** 응답하고, `text/plain`으로 지정 |
 
-`_redirects`와 `_headers`는 `cloudflare/deploy.sh`가 빌드 후 `public/`에 복사해서 함께 배포됩니다. 사이트의 다른 주소에는 영향이 없습니다.
+Caddy 규칙은 `naver` 뒤의 코드를 패턴으로 받기 때문에 **확인 파일이 바뀌어도 규칙은 고칠 필요가 없습니다.** 사이트의 다른 주소에는 영향이 없습니다.
 
 > [!warning] 이렇게 바꾸면 소유확인이 깨집니다
 >
-> - **`.html` 파일을 그대로 배포하기**: Cloudflare `html_handling`(auto-trailing-slash)이 `/naver<코드>.html`을 `/naver<코드>`로 **307 리다이렉트**합니다. 네이버는 리다이렉트를 따라간다고 보장하지 않습니다.
-> - **Content-Type을 `text/html`로 바꾸기**: Cloudflare가 HTML 응답 끝에 봇 감지 스크립트(`/cdn-cgi/challenge-platform/...`)를 덧붙여 **파일 내용이 달라집니다.**
+> - **Content-Type을 `text/html`로 바꾸기**: 사이트가 Cloudflare 프록시를 거치면 Cloudflare가 HTML 응답 끝에 봇 감지 스크립트(`/cdn-cgi/challenge-platform/...`)를 덧붙여 **파일 내용이 달라집니다.**
 > - **vault 파일을 옮기거나 지우기**: 규칙이 가리키는 파일이 없어져 404가 됩니다.
+> - **서버 Caddyfile에서 `@naver` 규칙 빼기**: `/naver<코드>.html` 파일이 사이트에 없으므로 404가 됩니다.
 
 ## 확인 파일이 바뀌었을 때
 
-다른 네이버 계정으로 등록하거나 사이트를 다시 등록해서 **확인 파일명(`naver` 뒤의 코드)이 바뀌면** 이 순서로 고칩니다.
+다른 네이버 계정으로 등록하거나 사이트를 다시 등록해서 **확인 파일명(`naver` 뒤의 코드)이 바뀌면** 이 순서로 합니다.
 
 1. **새 파일 받기**: 서치어드바이저에서 소유확인 방식으로 `HTML 파일 업로드`를 고르고 확인 파일을 내려받습니다. 소유확인 버튼을 누를 **같은 네이버 계정**으로 받아야 합니다 (계정마다 파일이 다름).
 2. **vault에 넣기**: 받은 파일을 **그대로** vault 최상단에 넣고, 예전 `naver….html`은 지웁니다.
    - 에디터로 열어 저장하지 마세요. 끝에 줄바꿈이 붙는 것처럼 내용이 조금만 바뀌어도 실패합니다.
    - 하위 폴더나 `private/`, `ignorePatterns` 폴더(`98-templates`, `01. Project`)에 두면 사이트 루트에 배포되지 않습니다.
-3. **규칙 두 파일 고치기**: 예전 코드를 새 코드로 바꿉니다. `_redirects`는 규칙 줄에 2군데, `_headers`는 경로 줄에 1군데입니다.
-
-   ```text
-   # cloudflare/_redirects
-   /naver<새 코드>.html /naver<새 코드> 200
-
-   # cloudflare/_headers
-   /naver<새 코드>.html
-     Content-Type: text/plain; charset=utf-8
-   ```
-
-   quartz 폴더에서 한 번에 바꾸려면 아래처럼 합니다. `NEW`에는 **`.html`을 뺀** 새 파일명을 넣습니다. macOS에서는 `sed -i` 대신 `sed -i ''`를 쓰세요.
-
-   ```bash
-   OLD=$(grep -v '^#' cloudflare/_redirects | grep -oE 'naver[0-9a-z]+' | head -1)
-   NEW=naver<새 코드>
-   sed -i "s/$OLD/$NEW/g" cloudflare/_redirects cloudflare/_headers
-   grep -n "$NEW" cloudflare/_redirects cloudflare/_headers   # 2줄이 나오면 정상
-   ```
-
-4. **커밋·배포**: 고친 두 파일을 커밋해서 push한 뒤, 서버에서 `bash build.sh`로 배포합니다.
-5. **배포 확인**: 아래 결과가 맞는지 본 다음 서치어드바이저에서 소유확인을 누릅니다.
+3. **배포**: 서버에서 `bash build.sh`로 배포합니다. 레포에서 고칠 파일은 없습니다.
+4. **배포 확인**: 아래 결과가 맞는지 본 다음 서치어드바이저에서 소유확인을 누릅니다.
 
    ```bash
    curl -sI https://wiki.techbara.dev/naver<새 코드>.html
@@ -75,7 +54,7 @@ modified: 2026-10-14
 - 기존과 같은 확인 파일을 주면: 새 주소에도 이미 배포되어 있으니 그대로 소유확인을 누릅니다.
 - 새 확인 파일을 주면: 위의 "확인 파일이 바뀌었을 때" 순서대로 합니다.
 
-사이트 주소 자체를 옮기는 설정(`quartz.config.yaml`의 `baseUrl`, `wrangler.jsonc`의 `routes`, `quartz/static/robots.txt`의 Sitemap 주소)은 이 문서에서 다루지 않습니다.
+사이트 주소 자체를 옮기는 설정(`quartz.config.yaml`의 `baseUrl`, 서버 Caddyfile의 사이트 주소, `quartz/static/robots.txt`의 Sitemap 주소)은 이 문서에서 다루지 않습니다.
 
 ## 유지 관리
 
@@ -87,9 +66,9 @@ modified: 2026-10-14
 
 먼저 `curl -sI https://wiki.techbara.dev/naver<코드>.html`로 응답을 봅니다.
 
-| 응답                                           | 원인                                                   | 확인할 것                                                                                                                                              |
-| ---------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `404`                                          | 규칙이 가리키는 파일이나 규칙 자체가 배포되지 않음     | vault 최상단의 파일명, `_redirects`의 코드 오타, `deploy.sh`의 `_redirects` 복사 줄                                                                    |
-| `307` (`location: /naver<코드>`)               | `public/`에 `.html` 파일이 있고 `_redirects`가 안 맞음 | `_redirects`의 코드                                                                                                                                    |
-| `200`인데 `content-type`이 `text/plain`이 아님 | `_headers` 경로가 안 맞음                              | `_headers`의 코드                                                                                                                                      |
-| `200`, `text/plain`인데 소유확인 실패          | 응답 밖의 문제                                         | 파일을 받은 계정과 소유확인한 계정이 같은지, 등록 주소가 `https://`인지, `cmp`로 내용이 같은지, Cloudflare 보안 설정이 네이버 로봇(Yeti)을 막지 않는지 |
+| 응답                                           | 원인                                          | 확인할 것                                                                                                                                              |
+| ---------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `404`                                          | 파일이 배포되지 않았거나 규칙이 적용되지 않음 | vault 최상단의 파일명, 서버의 사이트 폴더에 `naver<코드>` 파일이 있는지, 서버 Caddyfile에 `@naver` 규칙이 있는지                                       |
+| `30x` (`location` 헤더 있음)                   | 다른 Caddy 규칙이 먼저 리다이렉트함           | 서버 Caddyfile의 `redir` 규칙                                                                                                                          |
+| `200`인데 `content-type`이 `text/plain`이 아님 | `header @naver` 줄이 적용되지 않음            | 서버 Caddyfile의 `@naver` 정규식과 `header` 줄                                                                                                         |
+| `200`, `text/plain`인데 소유확인 실패          | 응답 밖의 문제                                | 파일을 받은 계정과 소유확인한 계정이 같은지, 등록 주소가 `https://`인지, `cmp`로 내용이 같은지, Cloudflare 보안 설정이 네이버 로봇(Yeti)을 막지 않는지 |
