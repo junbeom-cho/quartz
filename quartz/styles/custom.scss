@@ -1,127 +1,125 @@
 @use "./variables.scss" as *;
 
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Thin.woff2') format('woff2');
-    font-weight: 100;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-ExtraLight.woff2') format('woff2');
-    font-weight: 200;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Light.woff2') format('woff2');
-    font-weight: 300;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Medium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-SemiBold.woff2') format('woff2');
-    font-weight: 600;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-ExtraBold.woff2') format('woff2');
-    font-weight: 800;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
 }
- 
+
 @font-face {
-    font-family: Pretendard;
-    src: url('/static/fonts/Pretendard-Black.woff2') format('woff2');
-    font-weight: 900;
-    font-style: normal;
+  font-family: Pretendard;
+  src: url("/static/fonts/Pretendard-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
 }
- 
+
 // 코드 폰트: 순정 JetBrains Mono (굵기·이탤릭 전부 선언해도 브라우저는 실제로 쓰는 것만 받음)
 // 같은 패밀리에 Nerd Font 아이콘 영역(PUA)만 Symbols 파일로 채워서 코드 속 아이콘도 표시.
 // 아이콘이 없는 페이지에서는 unicode-range 덕분에 Symbols 파일(1.1MB)을 받지 않음
 $jetbrains-weights: (
-    100: Thin,
-    200: ExtraLight,
-    300: Light,
-    400: Regular,
-    500: Medium,
-    600: SemiBold,
-    700: Bold,
-    800: ExtraBold,
+  100: Thin,
+  200: ExtraLight,
+  300: Light,
+  400: Regular,
+  500: Medium,
+  600: SemiBold,
+  700: Bold,
+  800: ExtraBold,
 );
 @each $weight, $name in $jetbrains-weights {
-    @each $style, $suffix in (normal: "", italic: "Italic") {
-        $file: "#{$name}#{$suffix}";
-        // Regular의 이탤릭 파일 이름은 JetBrainsMono-Italic
-        @if $file == "RegularItalic" {
-            $file: "Italic";
-        }
-        @font-face {
-            font-family: "JetBrains Mono";
-            src: url("/static/fonts/JetBrainsMono-#{$file}.woff2") format("woff2");
-            font-weight: $weight;
-            font-style: $style;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: "JetBrains Mono";
-            src: url("/static/fonts/SymbolsNerdFontMono-Regular.woff2") format("woff2");
-            font-weight: $weight;
-            font-style: $style;
-            font-display: swap;
-            unicode-range: U+E000-F8FF, U+F0000-FFFFD;
-        }
+  @each $style, $suffix in (normal: "", italic: "Italic") {
+    $file: "#{$name}#{$suffix}";
+    // Regular의 이탤릭 파일 이름은 JetBrainsMono-Italic
+    @if $file == "RegularItalic" {
+      $file: "Italic";
     }
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("/static/fonts/JetBrainsMono-#{$file}.woff2") format("woff2");
+      font-weight: $weight;
+      font-style: $style;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("/static/fonts/SymbolsNerdFontMono-Regular.woff2") format("woff2");
+      font-weight: $weight;
+      font-style: $style;
+      font-display: swap;
+      unicode-range: U+E000-F8FF, U+F0000-FFFFD;
+    }
+  }
 }
 
 @font-face {
-    font-family: SymbolsNerdFontMono;
-    src: url('/static/fonts/SymbolsNerdFontMono-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
+  font-family: SymbolsNerdFontMono;
+  src: url("/static/fonts/SymbolsNerdFontMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
 }
-
-
 
 // display: desktop-only 래퍼(display: contents)가 base.scss의 `.sidebar.right > * { flex: 1 }`을 가로채서
 // 태블릿 폭에서 그래프 뷰가 제목 폭만큼 줄어드는 문제 보정
 @media all and not ($desktop) {
-    #quartz-body .sidebar.right > .desktop-only > * {
-        flex: 1;
-        max-height: 24rem;
-    }
+  #quartz-body .sidebar.right > .desktop-only > * {
+    flex: 1;
+    max-height: 24rem;
+  }
 }
 
 // disableBrokenWikilinks가 가상 페이지인 태그 링크에도 broken을 붙이므로 태그 링크는 원래대로
 a.internal.tag-link.broken {
-    opacity: 1;
+  opacity: 1;
 }
 
 // 본문·제목의 한글을 음절이 아닌 어절(띄어쓰기) 단위로 줄바꿈.
@@ -129,58 +127,58 @@ a.internal.tag-link.broken {
 // 띄어쓰기 없이 긴 단어는 overflow-wrap: anywhere로 강제 줄바꿈
 article,
 .article-title {
-    word-break: keep-all;
-    overflow-wrap: anywhere;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 // footer 플러그인은 링크 외 문구 옵션이 없어서 "Created with Quartz" 줄을 저작권 문구로 교체
 footer > p {
-    display: none;
+  display: none;
 }
 // 저작권 문구와 링크 아이콘을 한 줄에 두고 아이콘은 오른쪽 끝으로 (좁은 화면에서는 아래 줄로)
 footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    column-gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1rem;
 }
 // footer 플러그인의 `footer ul { margin-top: -1rem }`(문구 바로 아래에 붙이는 용도) 해제.
 // margin-left: auto로 좁은 화면에서 아래 줄로 내려가도 오른쪽 끝 유지
 #quartz-body footer ul {
-    margin: 0 0 0 auto;
+  margin: 0 0 0 auto;
 }
 footer::before {
-    content: "Copyright \00A9  2026 | All rights reserved.";
-    display: block;
-    margin: 1em 0; // 숨긴 <p>와 같은 여백
-    line-height: 1.6rem;
+  content: "Copyright \00A9  2026 | All rights reserved.";
+  display: block;
+  margin: 1em 0; // 숨긴 <p>와 같은 여백
+  line-height: 1.6rem;
 }
 
 // footer 링크를 아이콘으로 표시. 링크 텍스트는 font-size: 0으로 화면에서만 숨겨 스크린리더는 그대로 읽음
 footer ul a[href*="github.com"],
 footer ul a[href*="kuma.techbara.dev"],
 footer ul a[href*="blog.techbara.dev"] {
-    font-size: 0;
-    // 아이콘을 글자 기준선이 아닌 줄 가운데에 맞춤 (숨긴 텍스트도 line-height만큼 높이를 차지함)
-    display: flex;
-    align-items: center;
+  font-size: 0;
+  // 아이콘을 글자 기준선이 아닌 줄 가운데에 맞춤 (숨긴 텍스트도 line-height만큼 높이를 차지함)
+  display: flex;
+  align-items: center;
 
-    &::before {
-        content: "";
-        display: inline-block;
-        width: 1.25rem;
-        height: 1.25rem;
-        background-color: currentColor;
-        mask: no-repeat center / contain;
-    }
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: currentColor;
+    mask: no-repeat center / contain;
+  }
 }
 footer ul a[href*="github.com"]::before {
-    mask-image: url("/static/icons/github.svg");
+  mask-image: url("/static/icons/github.svg");
 }
 footer ul a[href*="kuma.techbara.dev"]::before {
-    mask-image: url("/static/icons/uptime.svg");
+  mask-image: url("/static/icons/uptime.svg");
 }
 footer ul a[href*="blog.techbara.dev"]::before {
-    mask-image: url("/static/icons/blog.svg");
+  mask-image: url("/static/icons/blog.svg");
 }

@@ -29,15 +29,41 @@ npx quartz plugin install   # quartz.lock.json 기준 플러그인 설치 (.quar
 
 ### 빌드 스크립트
 
-| 파일                       | 설명                                                                                                       |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `build.sh`                 | 서버 배포용. 최신 설정을 받아 빌드하고, 검사를 통과하면 Caddy가 서빙하는 폴더로 교체 (`--dry-run`: 검사만) |
-| `deploy/check-publish.mjs` | `build.sh`가 쓰는 검사. 비공개 노트나 `.canvas`·`.base`가 빌드 결과에 들어가면 배포를 막음                 |
-| `deploy/Caddyfile`         | 서버 Caddy의 wiki 사이트 블록 참고용 (URL 처리, 404, 네이버 소유확인 파일, 캐시)                           |
-| `ubuntu-build.sh`          | 서버에서 vault를 `public/`에 빌드                                                                          |
-| `mac-build.sh`             | macOS 로컬 미리보기 (포트 8080)                                                                            |
-| `win-build.bat`            | Windows 로컬 미리보기 (포트 8081)                                                                          |
-| `default.conf`             | nginx로 서빙할 때 쓰는 설정                                                                                |
+| 파일              | 설명                              |
+| ----------------- | --------------------------------- |
+| `ubuntu-build.sh` | 서버에서 vault를 `public/`에 빌드 |
+| `mac-build.sh`    | macOS 로컬 미리보기 (포트 8080)   |
+| `win-build.bat`   | Windows 로컬 미리보기 (포트 8081) |
+| `default.conf`    | nginx로 서빙할 때 쓰는 설정       |
+
+## 배포
+
+서버에서 vault를 빌드하고, 서버의 Caddy(Docker 컨테이너)가 결과물을 정적 파일로 서빙합니다. 배포에 쓰는 파일은 `deploy/`에 있습니다.
+
+| 파일                                                   | 설명                                                                                                                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`deploy/deploy.sh`](deploy/deploy.sh)                 | 서버 배포. 최신 커밋을 받아 빌드하고, 검사를 통과하면 `/data/caddy/site/wiki`(Caddy 컨테이너의 `/srv/wiki`)를 교체                                           |
+| [`deploy/Caddyfile`](deploy/Caddyfile)                 | 서버 Caddy의 wiki 설정(homelab `docker/caddy/conf/conf.d/03-quartz.caddy`) 사본 (URL 처리, 404, 네이버 소유확인 파일, 캐시). 서버 설정과 다르면 배포 때 경고 |
+| [`deploy/check-publish.mjs`](deploy/check-publish.mjs) | `deploy.sh`가 쓰는 검사. 비공개 노트나 `.canvas`·`.base`가 빌드 결과에 들어가면 배포를 막음                                                                  |
+| [`deploy/test-vault/`](deploy/test-vault)              | CI가 빌드하는 테스트 vault (공개 노트와, 걸러져야 하는 비공개 노트)                                                                                          |
+
+처음 한 번:
+
+1. 서버에 저장소를 clone하고 `mise install`
+2. `wiki.techbara.dev` DNS를 서버 공인 IP로 연결 (HTTPS는 Caddy의 `*.techbara.dev` 와일드카드 인증서로 처리)
+3. 첫 배포: `deploy/deploy.sh`
+4. homelab의 Caddy 설정을 반영: `docker exec caddy caddy reload --config /etc/caddy/Caddyfile`
+
+배포할 때마다 서버의 저장소 폴더에서 실행합니다. 둘 다 먼저 `git pull --ff-only`로 최신 커밋을 받습니다.
+
+```bash
+deploy/deploy.sh            # 빌드·검사 후 사이트 교체
+deploy/deploy.sh --dry-run  # 빌드·검사까지만 (사이트는 그대로)
+```
+
+Caddy 설정을 바꿀 때는 `deploy/Caddyfile`과 homelab의 `conf.d/03-quartz.caddy`를 똑같이 고친 뒤 `docker exec caddy caddy reload --config /etc/caddy/Caddyfile`로 반영합니다.
+
+CI([`.github/workflows/wiki-ci.yaml`](.github/workflows/wiki-ci.yaml))는 `v5` push와 PR마다 `deploy/deploy.sh --ci`(테스트 vault로 설치·빌드·검사), `npm run check`, `npm test`를 실행합니다. upstream의 workflow들은 `jackyzha0/quartz`에서만 실행되므로 손대지 않습니다.
 
 ## 커스터마이징 규칙
 

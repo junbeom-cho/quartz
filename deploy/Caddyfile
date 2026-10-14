@@ -1,0 +1,62 @@
+# ==== Quartz ==============================================================
+@quartz host wiki.techbara.dev
+
+handle @quartz {
+	root * /srv/wiki
+	encode zstd gzip
+
+	@hashed path_regexp hashed -[0-9a-f]{8}\.(css|js)$
+	header @hashed {
+		match status 2xx 304
+		Cache-Control "public, max-age=31536000, immutable"
+	}
+	header ?Cache-Control "public, no-cache"
+
+	# rsync 임시 폴더(.~tmp~) 같은 점 경로는 숨김
+	@dotfiles path_regexp dotfiles /\.
+	handle @dotfiles {
+		error 404
+	}
+
+	# 네이버 소유확인 파일 (Quartz가 .html을 떼고 복사함). >는 파일을 보낼 때만 적용돼 404는 text/html로 남음
+	@naver path_regexp naver ^/(naver[0-9a-z]+)\.html$
+	handle @naver {
+		rewrite * /{re.naver.1}
+		header >Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+
+	handle {
+		# 실제로 있는 .html 파일은 확장자 없는 주소로 308. 대상을 절대 URL로 고정해 open redirect를 막음
+		@htmlindex {
+			path_regexp htmlindex ^(/(?:.*/)?)index\.html$
+			file
+		}
+		redir @htmlindex https://wiki.techbara.dev{re.htmlindex.1}{?query} 308
+		@html {
+			path_regexp html ^(/.+)\.html$
+			not path /404.html */index.html
+			file
+		}
+		redir @html https://wiki.techbara.dev{re.html.1}{?query} 308
+
+		try_files {path} {path}.html {path}/ =404
+		error /404.html 404
+		file_server
+	}
+}
+
+handle_errors 404 {
+	handle @quartz {
+		# 에러 응답에는 사이트 보안 헤더가 붙지 않으므로 다시 붙임
+		import security
+		header Cache-Control "no-store"
+		# 조건부·Range 요청에도 404 페이지 전체를 보냄
+		request_header -If-*
+		request_header -Range
+		root * /srv/wiki
+		rewrite * /404.html
+		encode zstd gzip
+		file_server
+	}
+}
