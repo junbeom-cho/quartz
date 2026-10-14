@@ -1,6 +1,6 @@
 // 빌드 결과에 publish: true가 아닌 노트가 들어갔으면 실패한다.
 // Quartz는 explicit-publish 플러그인을 불러오지 못해도 경고만 찍고 모든 노트를 빌드하므로, 배포 전에 막는다.
-// 사용법: node cloudflare/check-publish.mjs <vault 경로> <빌드 결과 경로>
+// 사용법: node deploy/check-publish.mjs <vault 경로> <빌드 결과 경로>
 import fs from "node:fs"
 import path from "node:path"
 import { globby } from "globby"
@@ -8,7 +8,7 @@ import YAML from "yaml"
 
 const [vaultDir, outputDir] = process.argv.slice(2)
 if (!vaultDir || !outputDir) {
-  console.error("사용법: node cloudflare/check-publish.mjs <vault 경로> <빌드 결과 경로>")
+  console.error("사용법: node deploy/check-publish.mjs <vault 경로> <빌드 결과 경로>")
   process.exit(2)
 }
 
