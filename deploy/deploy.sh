@@ -106,4 +106,5 @@ rsync -a --no-times --checksum --delay-updates --delete-after --filter='R .~tmp~
 
 mkdir -p deploy/logs
 echo "$commit" > deploy/logs/deployed-commit # cron.sh가 이미 배포한 커밋인지 판단하는 데 쓴다
+# cron.sh가 이 줄에서 페이지 수를 읽어 로그에 남긴다
 echo "✅ $(date -Is) — $(find "$LIVE" -name '*.html' | wc -l) pages"
