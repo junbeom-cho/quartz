@@ -101,8 +101,8 @@ if [[ $mode != deploy ]]; then
 fi
 
 # 내용이 같은 파일은 mtime(=Caddy ETag)을 유지하고(--checksum --no-times), 바뀐 파일은 끝에 한꺼번에 교체한다
-# 끊긴 실행이 남긴 임시 폴더(.~tmp~)는 다음 실행에서 지운다
-rsync -a --no-times --checksum --delay-updates --delete-after --filter='R .~tmp~/' "$STAGING/" "$LIVE/"
+# 끊긴 실행이 남긴 임시 폴더(.~tmp~)는 다음 실행에서 지우고, 사이트 폴더에 직접 넣은 네이버 소유확인 파일은 지우지 않는다
+rsync -a --no-times --checksum --delay-updates --delete-after --filter='R .~tmp~/' --filter='P /naver[0-9a-f]*.html' "$STAGING/" "$LIVE/"
 
 mkdir -p deploy/logs
 echo "$commit" > deploy/logs/deployed-commit # cron.sh가 이미 배포한 커밋인지 판단하는 데 쓴다

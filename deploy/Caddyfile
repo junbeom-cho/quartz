@@ -18,16 +18,9 @@ handle @quartz {
 		error 404
 	}
 
-	# 네이버 소유확인 파일 (Quartz가 .html을 떼고 복사함). >는 파일을 보낼 때만 적용돼 404는 text/html로 남음
-	@naver path_regexp naver ^/(naver[0-9a-z]+)\.html$
-	handle @naver {
-		rewrite * /{re.naver.1}
-		header >Content-Type "text/plain; charset=utf-8"
-		file_server
-	}
-
 	handle {
 		# 실제로 있는 .html 파일은 확장자 없는 주소로 308. 대상을 절대 URL로 고정해 open redirect를 막음
+		# 사이트 폴더에 직접 넣은 네이버 소유확인 파일(naver<코드>.html)은 리다이렉트하면 확인에 실패하므로 그 주소에서 그대로 응답
 		@htmlindex {
 			path_regexp htmlindex ^(/(?:.*/)?)index\.html$
 			file
@@ -35,7 +28,7 @@ handle @quartz {
 		redir @htmlindex https://wiki.techbara.dev{re.htmlindex.1}{?query} 308
 		@html {
 			path_regexp html ^(/.+)\.html$
-			not path /404.html */index.html
+			not path /404.html */index.html /naver*.html
 			file
 		}
 		redir @html https://wiki.techbara.dev{re.html.1}{?query} 308

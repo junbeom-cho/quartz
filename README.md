@@ -60,13 +60,13 @@ git grep -nF "$(sed -n 's/^  baseUrl: //p' quartz.config.yaml)" -- ':!docs'
 
 서버에서 vault를 빌드하고, 서버의 Caddy(Docker 컨테이너)가 결과물을 정적 파일로 서빙합니다. 배포에 쓰는 파일은 `deploy/`에 있습니다.
 
-| 파일                                                   | 설명                                                                                                                 |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| [`deploy/deploy.sh`](deploy/deploy.sh)                 | 서버 배포. 최신 커밋을 받아 빌드하고, 검사를 통과하면 사이트 폴더(`LIVE`)를 교체                                     |
-| [`deploy/cron.sh`](deploy/cron.sh)                     | cron용. 아직 배포하지 않은 커밋이 있으면 `deploy.sh`로 배포하고 `deploy/logs/`에 기록 ([자동 배포](#자동-배포))      |
-| [`deploy/Caddyfile`](deploy/Caddyfile)                 | 서버 Caddy 설정(`CADDY_SNIPPET`)의 사본 (URL 처리, 404, 네이버 소유확인 파일, 캐시). 서버 설정과 다르면 배포 때 경고 |
-| [`deploy/check-publish.mjs`](deploy/check-publish.mjs) | `deploy.sh`가 쓰는 검사. 비공개 노트나 `.canvas`·`.base`가 빌드 결과에 들어가면 배포를 막음                          |
-| [`deploy/test-vault/`](deploy/test-vault)              | CI가 빌드하는 테스트 vault (공개 노트와, 걸러져야 하는 비공개 노트)                                                  |
+| 파일                                                   | 설명                                                                                                            |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| [`deploy/deploy.sh`](deploy/deploy.sh)                 | 서버 배포. 최신 커밋을 받아 빌드하고, 검사를 통과하면 사이트 폴더(`LIVE`)를 교체                                |
+| [`deploy/cron.sh`](deploy/cron.sh)                     | cron용. 아직 배포하지 않은 커밋이 있으면 `deploy.sh`로 배포하고 `deploy/logs/`에 기록 ([자동 배포](#자동-배포)) |
+| [`deploy/Caddyfile`](deploy/Caddyfile)                 | 서버 Caddy 설정(`CADDY_SNIPPET`)의 사본 (URL 처리, 404, 캐시). 서버 설정과 다르면 배포 때 경고                  |
+| [`deploy/check-publish.mjs`](deploy/check-publish.mjs) | `deploy.sh`가 쓰는 검사. 비공개 노트나 `.canvas`·`.base`가 빌드 결과에 들어가면 배포를 막음                     |
+| [`deploy/test-vault/`](deploy/test-vault)              | `deploy/deploy.sh --ci`가 빌드하는 테스트 vault (공개 노트와, 걸러져야 하는 비공개 노트)                        |
 
 `deploy/deploy.sh` 맨 위의 경로를 서버에 맞게 고칩니다.
 
@@ -120,7 +120,7 @@ deploy/deploy.sh --dry-run  # 빌드·검사까지만 (사이트는 그대로)
 
 Caddy 설정을 바꿀 때는 `deploy/Caddyfile`과 서버의 `CADDY_SNIPPET`을 똑같이 고친 뒤 Caddy를 reload합니다.
 
-CI([`.github/workflows/wiki-ci.yaml`](.github/workflows/wiki-ci.yaml))는 `v5` push와 PR마다 `deploy/deploy.sh --ci`(테스트 vault로 설치·빌드·검사), `npm run check`, `npm test`를 실행합니다. upstream의 workflow들은 `jackyzha0/quartz`에서만 실행되므로 손대지 않습니다.
+CI는 따로 없습니다. 배포할 때마다 `deploy.sh`가 위의 배포 전 검사를 하고, 하나라도 걸리면 사이트를 바꾸지 않습니다. 미리 확인하려면 `npm run check`(타입·포맷), `npm test`를 실행하고, 서버에서는 `deploy/deploy.sh --ci`로 테스트 vault 설치·빌드·검사까지 돌려 볼 수 있습니다 (`flock`이 없는 Windows에서는 실행되지 않음). `.github/workflows/`의 upstream workflow들은 `jackyzha0/quartz`에서만 실행되므로 손대지 않습니다.
 
 ### 자동 배포
 
@@ -196,7 +196,7 @@ rm deploy/logs/failed-commit                              # 실패한 커밋을 
 | `quartz/static/`            | 폰트 파일, `robots.txt` 등 정적 파일                                       |
 | `quartz.ts`                 | 커스텀 조건 등록 (`is-index`), 루트 `robots.txt` 복사, Umami 추적 스크립트 |
 
-노트 작성법은 [`guide/frontmatter-guide.md`](guide/frontmatter-guide.md)(frontmatter 키, OG 이미지), 네이버 서치어드바이저 소유확인은 [`guide/naver-site-verification.md`](guide/naver-site-verification.md)를 봅니다.
+노트 작성법은 [`guide/frontmatter-guide.md`](guide/frontmatter-guide.md)(frontmatter 키, OG 이미지)를 봅니다.
 
 ## 업그레이드 참고
 
