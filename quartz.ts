@@ -17,5 +17,37 @@ config.plugins.emitters.push({
   },
 })
 
+// Umami: 설정 파일의 analytics로는 data-domains·data-exclude-hash를 못 넣어, 로컬 미리보기와 #앵커 클릭까지 페이지뷰로 센다
+// Umami가 느리거나 닿지 않아도 페이지 load가 기다리지 않게 load 뒤에 넣는다
+config.plugins.emitters.push({
+  name: "UmamiAnalytics",
+  async emit() {
+    return []
+  },
+  externalResources: () => ({
+    js: [
+      {
+        loadTime: "afterDOMReady",
+        contentType: "inline",
+        spaPreserve: true,
+        script: `(() => {
+          const loadUmami = () => {
+            const umamiScript = document.createElement("script")
+            umamiScript.src = "https://umami.techbara.dev/script.js"
+            Object.assign(umamiScript.dataset, {
+              websiteId: "d81838c0-0c8f-4d30-ad7a-dbcceb2552a0",
+              domains: "wiki.techbara.dev",
+              excludeHash: "true",
+            })
+            document.head.append(umamiScript)
+          }
+          if (document.readyState === "complete") loadUmami()
+          else addEventListener("load", loadUmami, { once: true })
+        })()`,
+      },
+    ],
+  }),
+})
+
 export default config
 export const layout = await loadQuartzLayout()
