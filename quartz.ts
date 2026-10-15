@@ -33,7 +33,7 @@ config.plugins.emitters.push({
         script: `(() => {
           const loadUmami = () => {
             const umamiScript = document.createElement("script")
-            umamiScript.src = "https://umami.techbara.dev/script.js"
+            umamiScript.src = "https://umami.techbara.dev/assets/app.js"
             Object.assign(umamiScript.dataset, {
               websiteId: "d81838c0-0c8f-4d30-ad7a-dbcceb2552a0",
               domains: "wiki.techbara.dev",
